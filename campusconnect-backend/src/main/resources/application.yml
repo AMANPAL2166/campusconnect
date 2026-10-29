@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: campusconnect
+
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:campusconnect}?useUnicode=true&characterEncoding=utf8&connectionTimeZone=UTC
+    username: ${DB_USER:campus}
+    password: ${DB_PASSWORD:campus@123}
+    hikari:
+      maximum-pool-size: 10          # Phase B/D: ~6 in-flight expected, 10 is enough
+      connection-timeout: 3000       # fail fast (3 s) instead of hanging
+
+  jpa:
+    open-in-view: false              # Phase D, decision D3
+    hibernate:
+      ddl-auto: validate             # Phase D, D4: Flyway owns the schema
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true

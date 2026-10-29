@@ -1,0 +1,14 @@
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+
+# Build / Target (Backend & Frontend)
+target/
+build/
+dist/
+node_modules/
+.env
