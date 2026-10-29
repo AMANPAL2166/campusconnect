@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: campusconnect-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: campusconnect
+      MYSQL_USER: campus
+      MYSQL_PASSWORD: ${DB_PASSWORD:-campus_dev_pw}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_dev_pw}
+    ports:
+      - "3306:3306"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --innodb-ft-min-token-size=2
+      - --default-time-zone=+00:00
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_ROOT_PASSWORD:-root_dev_pw}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mysql_data:
