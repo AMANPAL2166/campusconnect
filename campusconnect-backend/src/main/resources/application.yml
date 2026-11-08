@@ -1,6 +1,11 @@
 spring:
   application:
     name: campusconnect
+  autoconfigure:
+    exclude:
+      # we use JWT, not Spring's default in-memory user (it prints a random password at startup)
+      - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+
 
   datasource:
     url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:campusconnect}?useUnicode=true&characterEncoding=utf8&connectionTimeZone=UTC
@@ -32,3 +37,13 @@ management:
     health:
       probes:
         enabled: true
+
+app:
+  auth:
+    allowed-email-domains:
+      - college.edu                  # Phase A: college email only. Change to your real domain.
+    require-email-verification: false  # DEV ONLY until Part 2
+  jwt:
+    secret: ${JWT_SECRET:dev-only-secret-dev-only-secret-dev-only-1234}   # prod: env var, min 32 bytes
+    access-token-minutes: 15
+    issuer: campusconnect

@@ -60,6 +60,12 @@
 			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
 
+		<!-- JSON processing -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jackson</artifactId>
+		</dependency>
+
 		<!-- Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -97,6 +103,34 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>testcontainers-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- JWT library -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.6</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.12.6</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 
