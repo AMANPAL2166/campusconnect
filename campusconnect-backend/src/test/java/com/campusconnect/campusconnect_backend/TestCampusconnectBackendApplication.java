@@ -1,5 +1,6 @@
 package com.campusconnect.campusconnect_backend;
 
+import com.campusconnect.CampusconnectBackendApplication;
 import org.springframework.boot.SpringApplication;
 
 public class TestCampusconnectBackendApplication {
