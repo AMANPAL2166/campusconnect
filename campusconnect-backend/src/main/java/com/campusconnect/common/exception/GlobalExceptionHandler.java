@@ -64,4 +64,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("Unexpected error traceId={}", pd.getProperties().get("traceId"), ex);   // details in logs, never in the response
         return pd;
     }
+    @ExceptionHandler(RateLimitedException.class)   // more specific than ApiException, so Spring picks this
+    ResponseEntity<ProblemDetail> handleRateLimited(RateLimitedException ex) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .header(HttpHeaders.RETRY_AFTER, String.valueOf(ex.getRetryAfterSeconds()))
+                .body(ProblemDetails.of(HttpStatus.TOO_MANY_REQUESTS, "RATE_LIMITED", ex.getMessage()));
+    }
 }

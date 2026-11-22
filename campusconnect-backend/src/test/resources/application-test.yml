@@ -1,0 +1,11 @@
+app:
+  auth:
+    require-email-verification: false   # Part 1 tests log in right after register. Verification tests override this.
+    refresh-reuse-grace-seconds: 0      # so a replay is treated as theft immediately
+  rate-limit:
+    register-per-ip: 1000               # every MockMvc call comes from 127.0.0.1
+    login-per-ip: 1000
+    login-failures-per-email: 5
+    resend-per-ip: 1000
+    resend-per-email: 3
+    refresh-per-ip: 1000
