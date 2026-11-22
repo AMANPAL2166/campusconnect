@@ -5,7 +5,15 @@ import java.util.List;
 import java.util.Locale;
 
 @ConfigurationProperties(prefix = "app.auth")
-public record AuthProperties(List<String> allowedEmailDomains, boolean requireEmailVerification) {
+public record AuthProperties(
+        List<String> allowedEmailDomains,
+        boolean requireEmailVerification,
+        long refreshTokenDays,
+        long refreshReuseGraceSeconds,
+        long emailVerificationHours,
+        boolean cookieSecure,
+        String frontendBaseUrl) {
+
     public AuthProperties {
         allowedEmailDomains = allowedEmailDomains == null ? List.of()
                 : allowedEmailDomains.stream().map(d -> d.toLowerCase(Locale.ROOT)).toList();
