@@ -43,7 +43,7 @@ public class AuthController {
         return withRefreshCookie(authService.refresh(raw, http.getRemoteAddr()));
     }
 
-    @PostMapping("/logout")   // always 204: the goal state ("logged out") is true either way
+    @PostMapping("/logout")
     public ResponseEntity<Void> logout(@CookieValue(name = REFRESH_COOKIE, required = false) String raw) {
         authService.logout(raw);
         return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie("", Duration.ZERO).toString()).build();
@@ -55,7 +55,7 @@ public class AuthController {
         return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie("", Duration.ZERO).toString()).build();
     }
 
-    @PostMapping("/verify-email")   // POST, token in body: GET links get prefetched by mail scanners and logged
+    @PostMapping("/verify-email")
     public ResponseEntity<Void> verifyEmail(@Valid @RequestBody VerifyEmailRequest req) {
         authService.verifyEmail(req.token());
         return ResponseEntity.noContent().build();
@@ -67,26 +67,33 @@ public class AuthController {
         return ResponseEntity.accepted().build();
     }
 
-    /** TEMPORARY (replaced by GET /users/me in the profile branch). */
+    /** TEMPORARY */
     @GetMapping("/me")
     public MeResponse me(@AuthenticationPrincipal AuthenticatedUser me) {
-        return new MeResponse(me.id(), me.role());
+        // AuthenticatedUser ke actual methods ke hisaab se yahan update karein
+        return new MeResponse(
+                me.id(),
+                null, // Agar AuthenticatedUser mein email nahi hai abhi
+                false, // Agar emailVerified status available nahi hai
+                me.role(),
+                null  // Profile service baad mein add hogi
+        );
     }
 
     // ---- cookie helpers ----
     private ResponseEntity<TokenResponse> withRefreshCookie(AuthResult r) {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie(r.refreshToken(), Duration.ofDays(props.refreshTokenDays())).toString())
-                .header(HttpHeaders.CACHE_CONTROL, "no-store")      // tokens must never sit in a cache
+                .header(HttpHeaders.CACHE_CONTROL, "no-store")
                 .body(r.tokens());
     }
 
     private ResponseCookie cookie(String value, Duration maxAge) {
         return ResponseCookie.from(REFRESH_COOKIE, value)
-                .httpOnly(true)                      // JavaScript (and so XSS) cannot read it
-                .secure(props.cookieSecure())        // HTTPS only in prod
-                .sameSite("Strict")                  // never sent on cross-site requests
-                .path("/api/v1/auth")                // only sent to auth endpoints
+                .httpOnly(true)
+                .secure(props.cookieSecure())
+                .sameSite("Strict")
+                .path("/api/v1/auth")
                 .maxAge(maxAge)
                 .build();
     }
