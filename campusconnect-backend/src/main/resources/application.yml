@@ -63,3 +63,5 @@ app:
     secret: ${JWT_SECRET:dev-only-secret-dev-only-secret-dev-only-1234}   # prod: env var, min 32 bytes
     access-token-minutes: 15
     issuer: campusconnect
+  storage:
+    public-base-url: ""      # filled in the storage branch; empty means avatarUrl = null
